@@ -3,7 +3,7 @@ import { getSpells } from '../../services/api/dndApi';
 
 export interface SpellsState {
   items: spell[];
-  status: string | null;
+  status: 'idle' | 'pending' | 'succeeded' | 'failed';
   error: string | null | undefined;
 }
 
@@ -14,31 +14,33 @@ interface spell {
 }
 
 export const thunkFetchSpells = createAsyncThunk(
-  'spells/fetchSpells',
-  getSpells
+  '@@spells/fetchSpells',
+  async () => {
+    return getSpells();
+  }
 );
 
 const initialState: SpellsState = {
   items: [],
-  status: null,
+  status: 'idle',
   error: null,
 };
 
 export const spellsSlice = createSlice({
-  name: 'spells',
+  name: '@@spells',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(thunkFetchSpells.pending, (state) => {
-      state.status = 'loading';
+      state.status = 'pending';
       state.error = null;
     });
     builder.addCase(thunkFetchSpells.fulfilled, (state, action) => {
-      state.status = 'resolved';
+      state.status = 'succeeded';
       state.items = action.payload.results;
     });
     builder.addCase(thunkFetchSpells.rejected, (state, action) => {
-      state.status = 'error';
+      state.status = 'failed';
       state.error = action.error.message;
     });
   },

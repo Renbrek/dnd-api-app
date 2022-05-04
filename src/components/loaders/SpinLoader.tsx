@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const SpinLoader = () => {
+export const SpinLoader: React.FC = () => {
   return (
     <div>
       <div>

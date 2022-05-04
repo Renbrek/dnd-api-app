@@ -14,7 +14,7 @@ export const SpellPage: React.FC = () => {
     dispatch(thunkFetchSpell(index));
   }, [dispatch, index]);
 
-  if (spell.status === 'loading') {
+  if (spell.status === 'pending') {
     return (
       <div>
         <SpinLoader />
@@ -22,10 +22,13 @@ export const SpellPage: React.FC = () => {
     );
   }
 
-  if (spell.status === 'resolved') {
+  if (spell.status === 'succeeded') {
     return (
-      <div>
-        <div>{JSON.stringify(spell)}</div>
+      <div className={'container'}>
+        <div className={'font-bold text-5xl'}>{spell.item.name}</div>
+        <div>
+          <pre>{JSON.stringify(spell, null, 2)}</pre>
+        </div>
       </div>
     );
   }
