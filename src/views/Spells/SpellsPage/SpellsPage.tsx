@@ -1,50 +1,34 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../store';
-import { thunkFetchSpells } from '../../../store/spells/spells.slice';
-import { useNavigate } from 'react-router-dom';
-import { SpinLoader } from '../../../components/loaders/SpinLoader';
+import React, { useEffect } from "react";
+import { thunkFetchSpells } from "../../../store/spells/spells.slice";
+import { LoadScreen } from "../../../components/loaders/LoadScreen";
+import NavigateItem from "../../../components/UI/NavigateItem/NavigateItem";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+import {
+  selectSpells,
+  selectSpellsStatus,
+} from "../../../store/spells/spells.selectors";
 
 export const SpellsPage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const spellsStatus = useSelector(
-    (state: RootState) => state.spellsReducer.status
-  );
-  const spells = useSelector((state: RootState) => state.spellsReducer.items);
-  const navigate = useNavigate();
-
-  const spellHandle = async (index: any) => {
-    navigate(index);
-  };
+  const dispatch = useAppDispatch();
+  const spellsStatus = useAppSelector(selectSpellsStatus);
+  const spells = useAppSelector(selectSpells);
 
   useEffect(() => {
     dispatch(thunkFetchSpells());
   }, [dispatch]);
 
   const spellsDiv = spells.map((spell) => (
-    <div
-      key={spell.index}
-      className={
-        'text-center text-2xl font-medium my-4 mx-2 p-4 border-2 border-black rounded-lg transition hover:bg-gray-100 hover:cursor-pointer'
-      }
-      onClick={() => spellHandle(spell.index)}
-    >
-      {spell.name}
-    </div>
+    <NavigateItem key={spell.index} to={spell.index} title={spell.name} />
   ));
 
-  if (spellsStatus === 'pending') {
-    return (
-      <div>
-        <SpinLoader />
-      </div>
-    );
+  if (spellsStatus === "pending") {
+    return <LoadScreen />;
   }
 
   return (
-    <div className={'container'}>
-      <div className={'font-bold text-5xl'}>Spells</div>
-      <div className={'flex justify-center'}>
+    <div className={"container"}>
+      <div className={"font-bold text-5xl pb-10 pt-5"}>Spells</div>
+      <div className={"flex justify-center"}>
         <div>{spellsDiv}</div>
       </div>
     </div>

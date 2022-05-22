@@ -1,33 +1,31 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../../store';
-import { thunkFetchSpell } from '../../../store/spell/spell.slice';
-import { SpinLoader } from '../../../components/loaders/SpinLoader';
+import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { thunkFetchSpellByIndex } from "../../../store/spell/spell.slice";
+import { LoadScreen } from "../../../components/loaders/LoadScreen";
+import { useAppDispatch, useAppSelector } from "../../../hooks/reduxHooks";
+import { selectSpellState } from "../../../store/spell/spell.selectors";
 
 export const SpellPage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { index } = useParams();
-  const spell = useSelector((state: RootState) => state.spellReducer);
+  const spellState = useAppSelector(selectSpellState);
 
   useEffect(() => {
-    dispatch(thunkFetchSpell(index));
+    dispatch(thunkFetchSpellByIndex(index));
   }, [dispatch, index]);
 
-  if (spell.status === 'pending') {
-    return (
-      <div>
-        <SpinLoader />
-      </div>
-    );
+  if (spellState.status === "pending") {
+    return <LoadScreen />;
   }
 
-  if (spell.status === 'succeeded') {
+  if (spellState.status === "succeeded") {
     return (
-      <div className={'container'}>
-        <div className={'font-bold text-5xl'}>{spell.item.name}</div>
+      <div className={"container"}>
+        <div className={"font-bold text-5xl pb-10 pt-5"}>
+          {spellState.item?.name}
+        </div>
         <div>
-          <pre>{JSON.stringify(spell, null, 2)}</pre>
+          <pre>{JSON.stringify(spellState, null, 2)}</pre>
         </div>
       </div>
     );
