@@ -10,7 +10,8 @@ const ClassesPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(thunkFetchClasses());
-  }, [dispatch]);
+  }, [dispatch]); 
+
 
   const classesDiv = classesState.items.map((c) => (
     <NavigateItem key={c.index} title={c.name} to={c.index} />
