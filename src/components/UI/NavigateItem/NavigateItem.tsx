@@ -1,5 +1,5 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface NavigateItemProps {
   title: string;
@@ -12,7 +12,7 @@ const NavigateItem: React.FC<NavigateItemProps> = ({ title, to }) => {
   return (
     <div
       className={
-        "w-80 text-center text-2xl font-medium my-4 mx-2 p-4 hover:cursor-pointer border-2 border-black rounded-lg hover:bg-gray-100 transition"
+        ' w-80 text-center text-2xl font-medium my-7 mx-2 p-4 shadow-lg backdrop-blur-lg hover:backdrop-blur-xl hover:shadow-2xl hover:cursor-pointer  transition-shadow'
       }
       onClick={() => navigate(to)}
     >
